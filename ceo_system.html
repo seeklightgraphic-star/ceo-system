@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生執行長 (CEO) 自我檢查系統 1.0</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-12 px-4">
+
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div class="border-b border-slate-100 pb-6 mb-8 text-center">
+            <h1 class="text-2xl font-bold text-slate-900 mb-2">📊 人生執行長 (CEO) 自我檢查系統 1.0</h1>
+            <p class="text-sm text-slate-500">將模糊的焦慮，轉化為理性的動態決策數據</p>
+        </div>
+
+        <div class="mb-8">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">🔍 當前準備診斷的人生專案 / 任務名稱：</label>
+            <input type="text" id="projectName" placeholder="例如：Meta 廣告投放專案、職涯下一步、某段高消耗的人際關係..." class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50">
+        </div>
+
+        <div class="mb-10 bg-slate-50 rounded-xl p-6 border border-slate-100">
+            <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center">📌 階段一：逆境狀態對號入座 (1-1)</h2>
+            
+            <div class="space-y-4">
+                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
+                    <input type="checkbox" id="q_stress" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
+                    <span class="text-sm">這個專案是否讓我<strong>長期感到疲憊</strong>，且<strong>持續帶來情緒壓力</strong>？</span>
+                </label>
+
+                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
+                    <input type="checkbox" id="q_evidence" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
+                    <span class="text-sm">觀察過去一個月，是否有看見<strong>事情總是在變好的「細微證據」</strong>？（努力有逐漸轉化為成果）</span>
+                </label>
+
+                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
+                    <input type="checkbox" id="q_risk" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
+                    <span class="text-sm">如果明天繼續加碼投入，<strong>風險會不會成倍放大</strong>，甚至嚴重涉及價值觀的妥協？</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-10 bg-slate-50 rounded-xl p-6 border border-slate-100">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">📊 階段二：財務與能力「損益健檢」 (1-2, 1-5)</h2>
+            <p class="text-xs text-slate-500 mb-4">請誠實評估此專案在「錢、勢、人」維度的賺賠狀況：</p>
+            
+            <div class="space-y-4">
+                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
+                    <input type="checkbox" id="q_loss" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
+                    <span class="text-sm"><strong>實質虧損：</strong>雖然有薪水或表面成就（得到），但背後伴隨健檢紅字或關係嚴重疏遠（失去），且<strong>失去 ＞ 得到</strong>。</span>
+                </label>
+
+                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
+                    <input type="checkbox" id="q_fat" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
+                    <span class="text-sm"><strong>虛胖資產：</strong>目前累積的經驗或職位，只要換了公司、換了主管就會完全失效，屬於帶不走的能力。</span>
+                </label>
+
+                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
+                    <input type="checkbox" id="q_mentor" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
+                    <span class="text-sm"><strong>支持空缺：</strong>在團隊中孤立無援、沒有技術支援者，職場上也完全缺乏導師（Mentor）引路。</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-10 bg-slate-50 rounded-xl p-6 border border-slate-100">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">⚡ 階段三：前進力與阻力動態量化 (1-4)</h2>
+            
+            <div class="mb-6 bg-white p-4 rounded-lg border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-sm font-semibold text-slate-700">1. 我的發力評分 (1 - 100分)：</label>
+                    <span id="powerVal" class="text-sm font-bold text-blue-600">50 分</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-3">你目前對這件事在意的程度、以及實質投入的努力程度。</p>
+                <input type="range" id="powerScore" min="1" max="100" value="50" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('powerVal').innerText = this.value + ' 分'">
+            </div>
+
+            <div class="bg-white p-4 rounded-lg border border-slate-200">
+                <label class="text-sm font-semibold text-slate-700 block mb-3">2. 盤點隱形摩擦力 (每項嚴重度 1 - 10分)：</label>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1">
+                            <span>🏢 組織摩擦（跨部門不合作、人力嚴重不足）</span>
+                            <span id="f1Val" class="font-bold text-amber-600">0 分</span>
+                        </div>
+                        <input type="range" id="f_org" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f1Val').innerText = this.value + ' 分'">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1">
+                            <span>⏰ 雜務/會議干擾（任務一直被打斷、時間被切碎）</span>
+                            <span id="f2Val" class="font-bold text-amber-600">0 分</span>
+                        </div>
+                        <input type="range" id="f_meeting" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f2Val').innerText = this.value + ' 分'">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1">
+                            <span>🛠️ 工具預算不足（效率低、花太多時間在找方法）</span>
+                            <span id="f3Val" class="font-bold text-amber-600">0 分</span>
+                        </div>
+                        <input type="range" id="f_tool" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f3Val').innerText = this.value + ' 分'">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1">
+                            <span>🤯 完美主義與過勞（反覆修改無法結案、身心疲憊專注力下降）</span>
+                            <span id="f4Val" class="font-bold text-amber-600">0 分</span>
+                        </div>
+                        <input type="range" id="f_perfect" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f4Val').innerText = this.value + ' 分'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="runDiagnosis()" class="w-full py-4.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-md transition duration-200 cursor-pointer text-center block">
+            🚀 產生執行長決策診斷報告
+        </button>
+
+        <div id="resultBox" class="mt-10 hidden border-t border-slate-200 pt-8">
+            <h3 class="text-xl font-bold text-slate-900 mb-4 text-center">📋 決策診斷報告</h3>
+            
+            <div id="statusAlert" class="mb-6 p-5 rounded-xl">
+                </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6 text-center">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <span class="block text-xs text-slate-500 font-medium">投入發力</span>
+                    <span id="reportPower" class="text-xl font-extrabold text-blue-600">--</span>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <span class="block text-xs text-slate-500 font-medium">阻力總和</span>
+                    <span id="reportResistance" class="text-xl font-extrabold text-amber-600">--</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                <h4 class="font-bold text-slate-900 mb-3 flex items-center">💡 執行長核心行動指南：</h4>
+                <div id="actionGuide" class="text-sm text-slate-700 space-y-2 leading-relaxed">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function runDiagnosis() {
+            const name = document.getElementById('projectName').value || '未命名專案';
+            
+            // 獲取階段數據
+            const qStress = document.getElementById('q_stress').checked;
+            const qEvidence = document.getElementById('q_evidence').checked;
+            const qRisk = document.getElementById('q_risk').checked;
+            
+            const qLoss = document.getElementById('q_loss').checked;
+            const qFat = document.getElementById('q_fat').checked;
+            const qMentor = document.getElementById('q_mentor').checked;
+            
+            // 獲取量化前進力
+            const power = parseInt(document.getElementById('powerScore').value);
+            const r1 = parseInt(document.getElementById('f_org').value);
+            const r2 = parseInt(document.getElementById('f_meeting').value);
+            const r3 = parseInt(document.getElementById('f_tool').value);
+            const r4 = parseInt(document.getElementById('f_perfect').value);
+            const totalResistance = r1 + r2 + r3 + r4;
+            const netForwardPower = power - totalResistance;
+
+            // 顯示結果區
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('reportPower').innerText = power + ' 分';
+            document.getElementById('reportResistance').innerText = totalResistance + ' 分';
+
+            let statusTitle = '';
+            let alertStyle = '';
+            let guideHTML = '';
+
+            // 決策樹邏輯判斷 (根據 1-1 到 1-5 課程邏輯)
+            if (qStress && !qEvidence && qRisk) {
+                // 懸崖狀態
+                statusTitle = `🛑 警報：專案【${name}】目前正處於【 懸崖 (The Cliff) 】狀態！`;
+                alertStyle = 'bg-rose-50 border border-rose-200 text-rose-900';
+                guideHTML = `
+                    <p class="font-bold text-rose-700">【煞車策略】立刻喊停，保護自己！</p>
+                    <p>每多走一步，反而會讓自己或組織冒更大的風險。這不是努力能為力挽狂瀾的局。請立即啟動<strong>止損三問</strong>，白紙黑字寫下認賠離場日期，拉長三年時間軸，用未來的空間對抗當下的損失厭惡。</p>
+                `;
+            } else if (qStress && !qEvidence && !qRisk) {
+                // 死路狀態
+                statusTitle = `⚠️ 警告：專案【${name}】目前正處於【 死路 (The Cul-de-sac) 】狀態！`;
+                alertStyle = 'bg-amber-50 border border-amber-200 text-amber-900';
+                guideHTML = `
+                    <p class="font-bold text-amber-700">【有期限的停留】停止無效努力，轉為離場準備。</p>
+                    <p>無論做再多都無法改變大局。如果你很清楚未來想要換到什麼新賽道，請把這段時間當成<strong>「有期限的停留」</strong>。在這段期間，放棄突破大局，將精力轉為瘋狂學習新領域、累積帶得走的知識與人脈。</p>
+                `;
+            } else if (qEvidence) {
+                // 低谷狀態
+                statusTitle = `🌱 診斷：專案【${name}】目前處於【 低谷 (The Dip) 】階段！`;
+                alertStyle = 'bg-emerald-50 border border-emerald-200 text-emerald-900';
+                
+                let subGuide = '';
+                if (netForwardPower <= 0) {
+                    subGuide = `<p class="mt-2 text-amber-700 font-medium">⚠️ 偵測到隱形危機：目前<strong>阻力總和 (${totalResistance}分) ≧ 發力 (${power}分)</strong>。原地踏步並非你不夠努力，請絕對不要盲目拉高發力（會導致嚴重過勞）。目前最有效的方針是<strong>「優先清除阻力」</strong>：嘗試戴上耳機與口罩阻絕環境干擾，並且一次只做一件事（先完成A再處理B）。</p>`;
+                } else {
+                    subGuide = `<p class="mt-2 text-emerald-700 font-medium">✨ 前進力健康：目前前進力為正值（+${netForwardPower}），專案正在進入複利滾動軌道，請調適好身心，保持節奏持續前進！</p>`;
+                }
+
+                guideHTML = `
+                    <p class="font-bold text-emerald-700">【堅持與撐住策略】痛苦但能累積長期能力，能看到光。</p>
+                    <p>這段努力並非消耗，而是正逐漸轉化為成果。既然已有事情在細微變好的細微證據，唯一要做的就是專注熬過去。</p>
+                    ${subGuide}
+                `;
+            } else {
+                // 一般診斷 / 未完全對號入座
+                statusTitle = `💡 專案【${name}】的經營損益分析報告`;
+                alertStyle = 'bg-blue-50 border border-blue-200 text-blue-900';
+                guideHTML = `<p>請根據目前的發力與阻力分值動態調配你的籌碼。若整體前進力偏低，請先嘗試降低環境雜務、會議及完美主義帶來的隱形摩擦力。</p>`;
+            }
+
+            // 資產與損益增補過濾器 (1-2 & 1-5 案例)
+            let assetAlertHTML = '';
+            let checkedCounts = (qLoss ? 1 : 0) + (qFat ? 1 : 0) + (qMentor ? 1 : 0);
+            
+            if (checkedCounts >= 2) {
+                assetAlertHTML = `
+                    <div class="mt-4 p-4.5 bg-red-50 rounded-lg border border-red-100 text-xs text-red-900">
+                        <strong class="block text-sm mb-1">🚨 CEO 財報預警：【努力的人死更慘】過濾器被觸發！</strong>
+                        此專案目前伴隨 <strong>實質虧損、虛胖資產或支持徹底空缺</strong> 的結構性危機。這代表它並非靠個人「加倍發力」就能解決的。請克制盲目硬撐的情緒勒索，優先進行資源重分配，或考慮尋找能產生正向複利的新跑道。
+                    </div>
+                `;
+            }
+
+            document.getElementById('statusAlert').className = `mb-6 p-5 rounded-xl ${alertStyle}`;
+            document.getElementById('statusAlert').innerHTML = `<span class="font-bold text-base block">${statusTitle}</span>${assetAlertHTML}`;
+            document.getElementById('actionGuide').innerHTML = guideHTML;
+            
+            // 錨點滾動到結果
+            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
