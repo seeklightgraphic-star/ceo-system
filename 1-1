@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生損益表 1-1：逆境狀態自我檢查系統</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .nav-placeholder {
+            text-align: center;
+            padding: 8px;
+            background: #eef2f7;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+
+        .question-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fdfdfd;
+            border-left: 4px solid #bdc3c7;
+        }
+
+        .question-group.active {
+            border-left-color: var(--accent-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-radio {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-radio:hover {
+            border-color: #cbd5e1;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + .btn-radio {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #1a252f;
+        }
+
+        .result-card {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-dip { background: #e3f2fd; border-left: 6px solid #2196f3; }
+        .result-culdesac { background: #fff3e0; border-left: 6px solid #ff9800; }
+        .result-cliff { background: #ffebee; border-left: 6px solid #f44336; }
+        .result-unknown { background: #f4f6f7; border-left: 6px solid #95a5a6; }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sop-title {
+            font-weight: bold;
+            margin-top: 15px;
+            color: #2c3e50;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 「複利升級的關鍵決策」</h1>
+    <div class="subtitle">人生損益表 1-1：低谷、死路、還是懸崖？</div>
+    
+    <div class="nav-placeholder">
+        目前章節：1-1 處境辨識 ｜ 🔗 未來可串接：1-2 決策權重、1-3 行動檢視
+    </div>
+
+    <form id="checkForm">
+        <div class="question-group">
+            <div class="question-text">Q1. 本週你是否有在工作或項目中，看到「微小指標在變好」的證據？</div>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q1" value="yes" required>
+                    <div class="btn-radio">是 (有微小變好)</div>
+                </label>
+                <label>
+                    <input type="radio" name="q1" value="no">
+                    <div class="btn-radio">否 (完全停滯或變差)</div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <div class="question-text">Q2. 檢視過去一個月投入的努力，你認為這些努力有「改變大局」的可能嗎？</div>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q2" value="yes" required>
+                    <div class="btn-radio">是 (有機會翻盤)</div>
+                </label>
+                <label>
+                    <input type="radio" name="q2" value="no">
+                    <div class="btn-radio">否 (只是無效消耗)</div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <div class="question-text">Q3. 如果你明天繼續加碼、重複做這件事，風險會不會成倍放大？</div>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q3" value="yes" required>
+                    <div class="btn-radio">是 (風險會失控)</div>
+                </label>
+                <label>
+                    <input type="radio" name="q3" value="no">
+                    <div class="btn-radio">否 (風險在可控範圍)</div>
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">分析當前處境</button>
+    </form>
+
+    <div id="resultCard" class="result-card">
+        <div id="resultTitle" class="result-title"></div>
+        <div id="resultDesc"></div>
+        <div class="sop-title">🛠️ 對應行動指南 (SOP)：</div>
+        <div id="resultSop"></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('checkForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const q1 = document.querySelector('input[name="q1"]:checked').value;
+        const q2 = document.querySelector('input[name="q2"]:checked').value;
+        const q3 = document.querySelector('input[name="q3"]:checked').value;
+        
+        const resultCard = document.getElementById('resultCard');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDesc = document.getElementById('resultDesc');
+        const resultSop = document.getElementById('resultSop');
+        
+        // 重置樣式
+        resultCard.className = 'result-card';
+        
+        // 判斷邏輯
+        if (q3 === 'yes') {
+            // 只要加碼會讓風險成倍放大，即為懸崖
+            resultCard.classList.add('result-cliff');
+            resultTitle.innerText = '🚨 診斷結果：你目前處於【懸崖 (The Cliff)】';
+            resultDesc.innerText = '觀察指標：每多走一步、多做一件事，反而會讓自己或公司暴露在更大的風險之中。此時沒有等待的空間。';
+            resultSop.innerText = '【緊急煞車模式】立刻砍掉、拒絕或止損，切勿抱持僥倖心理繼續加碼。';
+        } 
+        else if (q1 === 'no' && q2 === 'no') {
+            // 沒有微小變好，且努力無法改變大局，即為死路
+            resultCard.classList.add('result-culdesac');
+            resultTitle.innerText = '🚧 診斷結果：你目前處於【死路 (The Cul-de-sac)】';
+            resultDesc.innerText = '觀察指標：無論再怎麼努力，成果始終無法改變大局，屬於無效努力。';
+            resultSop.innerText = '【有期徒刑模式】設定明確的停損點（例如：再待半年）。這段時間不求突破大局，而是要瘋狂吸收新知識、探索新領域、拓展人脈，為「止損喊停」做足準備。';
+        } 
+        else if (q1 === 'yes' && q3 === 'no') {
+            // 能看到微小變好，且風險可控，即為低谷
+            resultCard.classList.add('result-dip');
+            resultTitle.innerText = '📈 診斷結果：你目前處於【低谷 (The Dip)】';
+            resultDesc.innerText = '觀察指標：能看見事情總是在「細微變好」的證據。此時的努力並非盲目消耗，而是正逐漸轉化為實質成果。';
+            resultSop.innerText = '【堅持與撐住模式】啟動「熬過去模式」，專注於每日的微小累積，將心力放在優化執行上，減少無謂的情緒內耗。';
+        } 
+        else {
+            // 其他複合狀況的綜合建議
+            resultCard.classList.add('result-unknown');
+            resultTitle.innerText = '🔍 診斷結果：處於【過渡或複合狀態】';
+            resultDesc.innerText = '目前的指標有些微交叉（例如：看見微小變好，但可能覺得無法改變大局）。';
+            resultSop.innerText = '建議重新審視核心目標。如果整體趨勢仍在變好，可先以「低谷」的心態專注累積；若覺得努力與產出不成正比，請務必先設定一個「驗收期限」。';
+        }
+        
+        resultCard.style.display = 'block';
+        
+        // 自動捲動到結果區
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>
