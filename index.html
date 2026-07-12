@@ -3,240 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人生執行長 (CEO) 自我檢查系統 1.0</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>人生執行長（CEO）戰略決策系統 2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
+            --accent-blue: #0066cc;
+            --accent-green: #34c759;
+            --accent-orange: #ff9500;
+            --accent-red: #ff3b30;
+            --border-color: #d2d2d7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-sub);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--bg-color);
+            padding-bottom: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-label input {
+            margin-top: 4px;
+            accent-color: var(--accent-blue);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            accent-color: var(--accent-blue);
+        }
+
+        .range-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--text-main);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 30px;
+        }
+
+        .btn:hover {
+            background: #2d2d2f;
+        }
+
+        .btn:active {
+            transform: scale(0.99);
+        }
+
+        /* 結果顯示區 */
+        #result-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .indicator-box {
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .bg-red { background-color: #ffe5e5; color: var(--accent-red); }
+        .bg-yellow { background-color: #fff9e6; color: var(--accent-orange); }
+        .bg-green { background-color: #e6f7ed; color: var(--accent-green); }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .military-order {
+            background: #1d1d1f;
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 18px;
+            border-left: 6px solid var(--accent-blue);
+        }
+
+        .military-order h3 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333336;
+            padding-bottom: 8px;
+        }
+
+        .military-order p {
+            color: #d2d2d7;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .chart-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen py-12 px-4">
+<body>
 
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div class="border-b border-slate-100 pb-6 mb-8 text-center">
-            <h1 class="text-2xl font-bold text-slate-900 mb-2">📊 人生執行長 (CEO) 自我檢查系統 1.0</h1>
-            <p class="text-sm text-slate-500">將模糊的焦慮，轉化為理性的動態決策數據</p>
+<div class="container">
+    <header>
+        <h1>人生執行長（CEO）戰略決策系統 2.0</h1>
+        <p>「策略性放棄與機會成本」深度盤點沙盤</p>
+    </header>
+
+    <div class="card">
+        <h2>📊 第一步：大環境與公司競爭力診斷 (3-3-5 法則)</h2>
+        <p style="color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem;">請勾選目前公司或專案符合的真實警訊：</p>
+        <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" id="env-1"> <b>【市場層】</b> 連續 3 年大環境搜尋量或整體需求大幅下滑（池塘水乾了）</label>
+            <label class="checkbox-label"><input type="checkbox" id="env-2"> <b>【競爭層】</b> 市場出現破壞性價格或功能極強的競品，公司無力招架</label>
+            <label class="checkbox-label"><input type="checkbox" id="env-3"> <b>【產品層】</b> 前端轉換率、回購率雙低，且高層無意願或無資金改善產品品質</label>
+            <label class="checkbox-label"><input type="checkbox" id="env-4"> <b>【通路層】</b> 獲客管道嚴重失效（如廣告紅利消失），且缺乏開發新通路的能力</label>
+            <label class="checkbox-label"><input type="checkbox" id="env-5"> <b>【營運層】</b> 主管消極面對前線問題，公司只盲目訂定高目標、向基層施壓（英雄主義陷阱）</label>
         </div>
+    </div>
 
-        <div class="mb-8">
-            <label class="block text-sm font-semibold text-slate-700 mb-2">🔍 當前準備診斷的人生專案 / 任務名稱：</label>
-            <input type="text" id="projectName" placeholder="例如：Meta 廣告投放專案、職涯下一步、某段高消耗的人際關係..." class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50">
-        </div>
-
-        <div class="mb-10 bg-slate-50 rounded-xl p-6 border border-slate-100">
-            <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center">📌 階段一：逆境狀態對號入座 (1-1)</h2>
-            
-            <div class="space-y-4">
-                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
-                    <input type="checkbox" id="q_stress" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
-                    <span class="text-sm">這個專案是否讓我<strong>長期感到疲憊</strong>，且<strong>持續帶來情緒壓力</strong>？</span>
-                </label>
-
-                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
-                    <input type="checkbox" id="q_evidence" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
-                    <span class="text-sm">觀察過去一個月，是否有看見<strong>事情總是在變好的「細微證據」</strong>？（努力有逐漸轉化為成果）</span>
-                </label>
-
-                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
-                    <input type="checkbox" id="q_risk" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
-                    <span class="text-sm">如果明天繼續加碼投入，<strong>風險會不會成倍放大</strong>，甚至嚴重涉及價值觀的妥協？</span>
-                </label>
-            </div>
-        </div>
-
-        <div class="mb-10 bg-slate-50 rounded-xl p-6 border border-slate-100">
-            <h2 class="text-lg font-bold text-slate-900 mb-4">📊 階段二：財務與能力「損益健檢」 (1-2, 1-5)</h2>
-            <p class="text-xs text-slate-500 mb-4">請誠實評估此專案在「錢、勢、人」維度的賺賠狀況：</p>
-            
-            <div class="space-y-4">
-                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
-                    <input type="checkbox" id="q_loss" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
-                    <span class="text-sm"><strong>實質虧損：</strong>雖然有薪水或表面成就（得到），但背後伴隨健檢紅字或關係嚴重疏遠（失去），且<strong>失去 ＞ 得到</strong>。</span>
-                </label>
-
-                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
-                    <input type="checkbox" id="q_fat" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
-                    <span class="text-sm"><strong>虛胖資產：</strong>目前累積的經驗或職位，只要換了公司、換了主管就會完全失效，屬於帶不走的能力。</span>
-                </label>
-
-                <label class="flex items-start bg-white p-3.5 rounded-lg border border-slate-200 cursor-pointer shadow-2xs">
-                    <input type="checkbox" id="q_mentor" class="mt-1 mr-3 w-4 h-4 rounded text-blue-600">
-                    <span class="text-sm"><strong>支持空缺：</strong>在團隊中孤立無援、沒有技術支援者，職場上也完全缺乏導師（Mentor）引路。</span>
-                </label>
-            </div>
-        </div>
-
-        <div class="mb-10 bg-slate-50 rounded-xl p-6 border border-slate-100">
-            <h2 class="text-lg font-bold text-slate-900 mb-4">⚡ 階段三：前進力與阻力動態量化 (1-4)</h2>
-            
-            <div class="mb-6 bg-white p-4 rounded-lg border border-slate-200">
-                <div class="flex justify-between items-center mb-2">
-                    <label class="text-sm font-semibold text-slate-700">1. 我的發力評分 (1 - 100分)：</label>
-                    <span id="powerVal" class="text-sm font-bold text-blue-600">50 分</span>
+    <div class="card">
+        <h2>🛠️ 第二步：核心能力複利與任務配置</h2>
+        <div class="grid-2">
+            <div>
+                <div class="form-group">
+                    <label>當前最主要的日常工作任務描述</label>
+                    <input type="text" id="task-name" value="處理跨部門雜務與例行行政溝通">
                 </div>
-                <p class="text-xs text-slate-400 mb-3">你目前對這件事在意的程度、以及實質投入的努力程度。</p>
-                <input type="range" id="powerScore" min="1" max="100" value="50" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('powerVal').innerText = this.value + ' 分'">
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-200">
-                <label class="text-sm font-semibold text-slate-700 block mb-3">2. 盤點隱形摩擦力 (每項嚴重度 1 - 10分)：</label>
-                
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1">
-                            <span>🏢 組織摩擦（跨部門不合作、人力嚴重不足）</span>
-                            <span id="f1Val" class="font-bold text-amber-600">0 分</span>
-                        </div>
-                        <input type="range" id="f_org" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f1Val').innerText = this.value + ' 分'">
+                <div class="form-group">
+                    <label>此任務的【能力複利值】（可累積、可遷移度）</label>
+                    <div class="range-container">
+                        <input type="range" id="comp-val" min="0" max="100" value="30">
+                        <span class="range-value" id="comp-val-txt">30</span>
                     </div>
-
-                    <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1">
-                            <span>⏰ 雜務/會議干擾（任務一直被打斷、時間被切碎）</span>
-                            <span id="f2Val" class="font-bold text-amber-600">0 分</span>
-                        </div>
-                        <input type="range" id="f_meeting" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f2Val').innerText = this.value + ' 分'">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1">
-                            <span>🛠️ 工具預算不足（效率低、花太多時間在找方法）</span>
-                            <span id="f3Val" class="font-bold text-amber-600">0 分</span>
-                        </div>
-                        <input type="range" id="f_tool" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f3Val').innerText = this.value + ' 分'">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1">
-                            <span>🤯 完美主義與過勞（反覆修改無法結案、身心疲憊專注力下降）</span>
-                            <span id="f4Val" class="font-bold text-amber-600">0 分</span>
-                        </div>
-                        <input type="range" id="f_perfect" min="0" max="10" value="0" class="w-full" oninput="document.getElementById('f4Val').innerText = this.value + ' 分'">
+                </div>
+                <div class="form-group">
+                    <label>此任務的【槓桿加成效果】（放大個人價值度）</label>
+                    <div class="range-container">
+                        <input type="range" id="lev-val" min="0" max="100" value="25">
+                        <span class="range-value" id="lev-val-txt">25</span>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <button onclick="runDiagnosis()" class="w-full py-4.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-md transition duration-200 cursor-pointer text-center block">
-            🚀 產生執行長決策診斷報告
-        </button>
-
-        <div id="resultBox" class="mt-10 hidden border-t border-slate-200 pt-8">
-            <h3 class="text-xl font-bold text-slate-900 mb-4 text-center">📋 決策診斷報告</h3>
-            
-            <div id="statusAlert" class="mb-6 p-5 rounded-xl">
-                </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-6 text-center">
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span class="block text-xs text-slate-500 font-medium">投入發力</span>
-                    <span id="reportPower" class="text-xl font-extrabold text-blue-600">--</span>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span class="block text-xs text-slate-500 font-medium">阻力總和</span>
-                    <span id="reportResistance" class="text-xl font-extrabold text-amber-600">--</span>
-                </div>
-            </div>
-
-            <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                <h4 class="font-bold text-slate-900 mb-3 flex items-center">💡 執行長核心行動指南：</h4>
-                <div id="actionGuide" class="text-sm text-slate-700 space-y-2 leading-relaxed">
-                    </div>
+            <div style="background: var(--bg-color); padding: 15px; border-radius: 12px; font-size: 0.9rem;">
+                <p><b>💡 象限判讀指引：</b></p>
+                <p style="margin-top: 5px;">• 高複利 × 高加成 ➔ <b>成長飛輪</b>（全力投入）</p>
+                <p>• 低複利 × 高加成 ➔ <b>容易放不掉</b>（小心被組織細綁）</p>
+                <p>• 低複利 × 低加成 ➔ <b>重複勞動</b>（慢性折磨，應立即外包或砍掉）</p>
             </div>
         </div>
     </div>
 
-    <script>
-        function runDiagnosis() {
-            const name = document.getElementById('projectName').value || '未命名專案';
-            
-            // 獲取階段數據
-            const qStress = document.getElementById('q_stress').checked;
-            const qEvidence = document.getElementById('q_evidence').checked;
-            const qRisk = document.getElementById('q_risk').checked;
-            
-            const qLoss = document.getElementById('q_loss').checked;
-            const qFat = document.getElementById('q_fat').checked;
-            const qMentor = document.getElementById('q_mentor').checked;
-            
-            // 獲取量化前進力
-            const power = parseInt(document.getElementById('powerScore').value);
-            const r1 = parseInt(document.getElementById('f_org').value);
-            const r2 = parseInt(document.getElementById('f_meeting').value);
-            const r3 = parseInt(document.getElementById('f_tool').value);
-            const r4 = parseInt(document.getElementById('f_perfect').value);
-            const totalResistance = r1 + r2 + r3 + r4;
-            const netForwardPower = power - totalResistance;
+    <div class="card">
+        <h2>🎯 第三步：獨立變現項目的商業模式預判</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>預計發展的變現/接案項目名稱</label>
+                <input type="text" id="biz-name" value="Ads廣告投放自動化與行銷專案陪跑系統">
+            </div>
+            <div class="form-group">
+                <label>目標客戶的需求型態</label>
+                <select id="demand-type">
+                    <option value="high">長期陪跑（具備天然高回購基因）</option>
+                    <option value="low">一次性痛點解法（結案後即結束）</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>你的服務在客戶心中的「服務價值」定位</label>
+            <select id="service-value">
+                <option value="4">求生時期重點（幫客戶救命、直接帶來營收效益）➔ 最高回購</option>
+                <option value="3">生意加速器（有很好，能幫客戶放大業績）➔ 高回購</option>
+                <option value="2">有也不錯（流於功能操作，替代性高）➔ 低回購</option>
+                <option value="1">可有可無（純行政或輔助性質）➔ 絕不投入</option>
+            </select>
+        </div>
+    </div>
 
-            // 顯示結果區
-            document.getElementById('resultBox').classList.remove('hidden');
-            document.getElementById('reportPower').innerText = power + ' 分';
-            document.getElementById('reportResistance').innerText = totalResistance + ' 分';
-
-            let statusTitle = '';
-            let alertStyle = '';
-            let guideHTML = '';
-
-            // 決策樹邏輯判斷 (根據 1-1 到 1-5 課程邏輯)
-            if (qStress && !qEvidence && qRisk) {
-                // 懸崖狀態
-                statusTitle = `🛑 警報：專案【${name}】目前正處於【 懸崖 (The Cliff) 】狀態！`;
-                alertStyle = 'bg-rose-50 border border-rose-200 text-rose-900';
-                guideHTML = `
-                    <p class="font-bold text-rose-700">【煞車策略】立刻喊停，保護自己！</p>
-                    <p>每多走一步，反而會讓自己或組織冒更大的風險。這不是努力能為力挽狂瀾的局。請立即啟動<strong>止損三問</strong>，白紙黑字寫下認賠離場日期，拉長三年時間軸，用未來的空間對抗當下的損失厭惡。</p>
-                `;
-            } else if (qStress && !qEvidence && !qRisk) {
-                // 死路狀態
-                statusTitle = `⚠️ 警告：專案【${name}】目前正處於【 死路 (The Cul-de-sac) 】狀態！`;
-                alertStyle = 'bg-amber-50 border border-amber-200 text-amber-900';
-                guideHTML = `
-                    <p class="font-bold text-amber-700">【有期限的停留】停止無效努力，轉為離場準備。</p>
-                    <p>無論做再多都無法改變大局。如果你很清楚未來想要換到什麼新賽道，請把這段時間當成<strong>「有期限的停留」</strong>。在這段期間，放棄突破大局，將精力轉為瘋狂學習新領域、累積帶得走的知識與人脈。</p>
-                `;
-            } else if (qEvidence) {
-                // 低谷狀態
-                statusTitle = `🌱 診斷：專案【${name}】目前處於【 低谷 (The Dip) 】階段！`;
-                alertStyle = 'bg-emerald-50 border border-emerald-200 text-emerald-900';
-                
-                let subGuide = '';
-                if (netForwardPower <= 0) {
-                    subGuide = `<p class="mt-2 text-amber-700 font-medium">⚠️ 偵測到隱形危機：目前<strong>阻力總和 (${totalResistance}分) ≧ 發力 (${power}分)</strong>。原地踏步並非你不夠努力，請絕對不要盲目拉高發力（會導致嚴重過勞）。目前最有效的方針是<strong>「優先清除阻力」</strong>：嘗試戴上耳機與口罩阻絕環境干擾，並且一次只做一件事（先完成A再處理B）。</p>`;
-                } else {
-                    subGuide = `<p class="mt-2 text-emerald-700 font-medium">✨ 前進力健康：目前前進力為正值（+${netForwardPower}），專案正在進入複利滾動軌道，請調適好身心，保持節奏持續前進！</p>`;
-                }
-
-                guideHTML = `
-                    <p class="font-bold text-emerald-700">【堅持與撐住策略】痛苦但能累積長期能力，能看到光。</p>
-                    <p>這段努力並非消耗，而是正逐漸轉化為成果。既然已有事情在細微變好的細微證據，唯一要做的就是專注熬過去。</p>
-                    ${subGuide}
-                `;
-            } else {
-                // 一般診斷 / 未完全對號入座
-                statusTitle = `💡 專案【${name}】的經營損益分析報告`;
-                alertStyle = 'bg-blue-50 border border-blue-200 text-blue-900';
-                guideHTML = `<p>請根據目前的發力與阻力分值動態調配你的籌碼。若整體前進力偏低，請先嘗試降低環境雜務、會議及完美主義帶來的隱形摩擦力。</p>`;
-            }
-
-            // 資產與損益增補過濾器 (1-2 & 1-5 案例)
-            let assetAlertHTML = '';
-            let checkedCounts = (qLoss ? 1 : 0) + (qFat ? 1 : 0) + (qMentor ? 1 : 0);
-            
-            if (checkedCounts >= 2) {
-                assetAlertHTML = `
-                    <div class="mt-4 p-4.5 bg-red-50 rounded-lg border border-red-100 text-xs text-red-900">
-                        <strong class="block text-sm mb-1">🚨 CEO 財報預警：【努力的人死更慘】過濾器被觸發！</strong>
-                        此專案目前伴隨 <strong>實質虧損、虛胖資產或支持徹底空缺</strong> 的結構性危機。這代表它並非靠個人「加倍發力」就能解決的。請克制盲目硬撐的情緒勒索，優先進行資源重分配，或考慮尋找能產生正向複利的新跑道。
+    <div class="card">
+        <h2>👥 第四步：職場人際內耗與團隊管理診斷</h2>
+        <div class="grid-2">
+            <div>
+                <div class="form-group">
+                    <label>人際內耗：價值觀衝突帶來的情緒勞動比例</label>
+                    <div class="range-container">
+                        <input type="range" id="emotion-burn" min="0" max="100" value="75">
+                        <span class="range-value" id="emotion-burn-txt">75%</span>
                     </div>
-                `;
-            }
+                    <p style="color: var(--text-sub); font-size: 0.8rem; margin-top: 5px;">* 價值觀衝突帶來的損耗是永久性的，無法透過休息恢復。</p>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label>管理盤點：核心團隊成員目前的主要狀態</label>
+                    <select id="team-status">
+                        <option value="star">明星球員 (高能力 × 高意願) ➔ 充分授權</option>
+                        <option value="new">有待觀察 (低能力 × 高意願) ➔ 密集訓練與給SOP</option>
+                        <option value="bomb">不定時炸彈 (高能力 × 低意願) ➔ 對齊利益誘因</option>
+                        <option value="fire">立即處理 (低能力 × 低意願) ➔ 啟動停損汰換</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            document.getElementById('statusAlert').className = `mb-6 p-5 rounded-xl ${alertStyle}`;
-            document.getElementById('statusAlert').innerHTML = `<span class="font-bold text-base block">${statusTitle}</span>${assetAlertHTML}`;
-            document.getElementById('actionGuide').innerHTML = guideHTML;
+    <div class="card">
+        <h2>🧭 第五步：可視化人生資源配置調整</h2>
+        <p style="color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem;">拖動滑桿分配你一整天的注意力和能量籌碼（總和必須為 100%）：</p>
+        <div class="form-group">
+            <label>1. 正職打工 / 組織內部消耗（日常例行雜務）</label>
+            <div class="range-container">
+                <input type="range" id="time-job" min="0" max="100" value="65">
+                <span class="range-value" id="time-job-txt">65%</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>2. 個人變現系統研發 / 副業累積（未來核心資產）</label>
+            <div class="range-container">
+                <input type="range" id="time-side" min="0" max="100" value="15">
+                <span class="range-value" id="time-side-txt">15%</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>3. 生活熱情與大自然充電（登山健行、正念冥想空間）</label>
+            <div class="range-container">
+                <input type="range" id="time-life" min="0" max="100" value="20">
+                <span class="range-value" id="time-life-txt">20%</span>
+            </div>
+        </div>
+        <div id="percentage-alert" style="color: var(--accent-red); font-size: 0.9rem; font-weight: 600; display: none; text-align: center; margin-top: 10px;">
+            ⚠️ 警告：目前資源分配總和不等於 100%（目前總和：<span id="current-total">100</span>%），請微調滑桿！
+        </div>
+    </div>
+
+    <button class="btn" onclick="generateStrategy()">發動人生執行長降維決策</button>
+
+    <div id="result-section">
+        <div class="card">
+            <h2>🚀 人生執行長戰略沙盤推演報告</h2>
             
-            // 錨點滾動到結果
-            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
+            <div id="status-indicator" class="indicator-box"></div>
+
+            <div class="report-grid">
+                <div class="military-order" id="military-order-box">
+                    </div>
+                
+                <div style="background: #ffffff; padding: 20px; border-radius: 18px; border: 1px solid var(--border-color);">
+                    <h4 style="font-size: 1rem; margin-bottom: 15px; text-align: center;">個人資源配置現狀 (注意力量化)</h4>
+                    <div class="chart-box">
+                        <canvas id="resourceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 滑桿數值即時連動
+    const rangeInputs = ['comp-val', 'lev-val', 'emotion-burn', 'time-job', 'time-side', 'time-life'];
+    rangeInputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', function() {
+            let suffix = (id.includes('emotion') || id.includes('time')) ? '%' : '';
+            document.getElementById(id + '-txt').innerText = this.value + suffix;
+            checkTotalPercentage();
+        });
+    });
+
+    function checkTotalPercentage() {
+        let job = parseInt(document.getElementById('time-job').value);
+        let side = parseInt(document.getElementById('time-side').value);
+        let life = parseInt(document.getElementById('time-life').value);
+        let total = job + side + life;
+        
+        const alertBox = document.getElementById('percentage-alert');
+        document.getElementById('current-total').innerText = total;
+        
+        if (total !== 100) {
+            alertBox.style.display = 'block';
+            return false;
+        } else {
+            alertBox.style.display = 'none';
+            return true;
         }
-    </script>
+    }
+
+    let myChart = null;
+
+    function generateStrategy() {
+        if (!checkTotalPercentage()) {
+            alert('請先調整第五步的資源配置，確保三者總和恰好等於 100% 才能進行精密推演！');
+            return;
+        }
+
+        // 顯示結果區域
+        document.getElementById('result-section').style.display = 'block';
+
+        // 1. 大環境警訊計分
+        let envCount = 0;
+        for(let i=1; i<=5; i++) {
+            if(document.getElementById('env-' + i).checked) envCount++;
+        }
+
+        // 2. 判定公司紅綠燈狀態
+        const indicator = document.getElementById('status-indicator');
+        let status = 'green';
+        let statusTxt = '';
+        
+        if (envCount >= 4) {
+            status = 'red';
+            indicator.className = 'indicator-box bg-red';
+            statusTxt = '🔴 戰略級危險：環境已進入紅燈 (結構性衰退，切勿當拯救公司的悲劇英雄)';
+        } else if (envCount >= 2) {
+            status = 'yellow';
+            indicator.className = 'indicator-box bg-yellow';
+            statusTxt = '🟡 戰略級考驗：環境處於黃燈 (內耗嚴重，建議採取「借殼練兵」黃燈跳板策略)';
+        } else {
+            status = 'green';
+            indicator.className = 'indicator-box bg-green';
+            statusTxt = '🟢 戰略級安全：環境處於綠燈 (具備護城河，可拼一把累積戰功)';
+        }
+        indicator.innerText = statusTxt;
+
+        // 3. 能力四象限判定
+        let comp = parseInt(document.getElementById('comp-val').value);
+        let lev = parseInt(document.getElementById('lev-val').value);
+        let taskName = document.getElementById('task-name').value;
+        let quadrant = '';
+        let quadrantSOP = '';
+
+        if (comp >= 50 && lev >= 50) {
+            quadrant = '【成長飛輪】';
+            quadrantSOP = '這是你的核心戰略資產！請拼死保護這個項目的時間，讓複利產生加成效果。';
+        } else if (comp < 50 && lev >= 50) {
+            quadrant = '【容易放不掉】';
+            quadrantSOP = '你陷入了小公司的萬能主管綁架陷阱！這看似有權力，本質上換了環境就歸零。必須立刻停止大包大攬。';
+        } else if (comp >= 50 && lev < 50) {
+            quadrant = '【成長有限】';
+            quadrantSOP = '屬於單純的技術精進，缺乏槓桿。建議在穩定中尋找與外包/AI工具協作的加成機會。';
+        } else {
+            quadrant = '【重複勞動 / 慢性折磨】';
+            quadrantSOP = '極度危險！你正在出賣時間換取低價值的例行消耗。請在下週一立刻使用 AI 封裝成 SOP，將其強制發包或軟拒絕！';
+        }
+
+        // 4. 變現回購率判定
+        let serviceVal = document.getElementById('service-value').value;
+        let demandType = document.getElementById('demand-type').value;
+        let bizName = document.getElementById('biz-name').value;
+        let bizAdvice = '';
+
+        if (serviceVal >= 3 && demandType === 'high') {
+            bizAdvice = '🔥 這個項目完全踩在「高回購黃金區」！客戶天然具有續約動機。請將其列為明年獨立變現的北極星指標產品。';
+        } else {
+            bizAdvice = '⚠️ 注意：該服務有流於「一次性功能操作」或「可有可無」的歸零風險。選客戶比改產品重要，請重新思考如何切入對方的「求生重點」或綁定長期陪跑模式。';
+        }
+
+        // 5. 生成軍令狀
+        let jobTime = document.getElementById('time-job').value;
+        let sideTime = document.getElementById('time-side').value;
+        let lifeTime = document.getElementById('time-life').value;
+        let emoBurn = document.getElementById('emotion-burn').value;
+        let teamStatus = document.getElementById('team-status').value;
+        
+        let teamAdvice = '';
+        if (teamStatus === 'fire') teamAdvice = '對於團隊中的不適任者，切記「績效不好不等於人不好，只是組合不成立」，請快點談、好好談，立刻砍掉內耗。';
+        else if (teamStatus === 'new') teamAdvice = '新人目前意願高、能力缺，請強迫他將提問化為雲端交接文件，建立樂高式的微型 SOP。';
+        else teamAdvice = '保持目前的管理節奏，將精力與利益最大化留給對的人。';
+
+        const orderBox = document.getElementById('military-order-box');
+        orderBox.innerHTML = `
+            <h3>📋 Maple 的人生執行長秘密軍令狀</h3>
+            <p><b>【環境與崗位定位】</b> 目前組織在戰略上被判定為 <b>${statusTxt.split('：')[1]}</b>。你留下來的唯一目的，是將這裡當作個人核心變現系統的<b>「免費孵化器」</b>，絕不在不對的環境裡搶當英雄。</p>
+            <p><b>【當前日常任務審查】</b> 你目前耗費大量精力的「${taskName}」落入 <b>${quadrant}</b> 象限。執行長指令：${quadrantSOP}</p>
+            <p><b>【情緒勞動與管理警戒】</b> 你的職場價值觀內耗高達 <b>${emoBurn}%</b>，這是無法透過休息恢復的永久性損耗！明天早上起，請戴上口罩與耳機建立實體邊界，拒絕對方無意義的聊天消耗。${teamAdvice}</p>
+            <p><b>【未來獨立賽道驗證】</b> 針對即將啟動的「${bizName}」，市場健檢提示：${bizAdvice}</p>
+            <p style="color: var(--accent-blue); font-weight: 600; margin-top: 15px; font-size: 1rem; border-top: 1px solid #333336; padding-top: 10px;">
+                🎯 終極承諾：當我的變現系統產出足以支撐生活並超越正職月薪時，我將主動向公司提出切換為非同步的「行銷顧問合作模式」，徹底奪回時間與地點的自由主權！
+            </p>
+        `;
+
+        // 6. 渲染 / 更新圓餅圖
+        if (myChart) {
+            myChart.destroy();
+        }
+
+        const ctx = document.getElementById('resourceChart').getContext('2d');
+        myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['打工消耗', '變現研發', '生活與自然充電'],
+                datasets: [{
+                    data: [jobTime, sideTime, lifeTime],
+                    backgroundColor: ['#86868b', '#0066cc', '#34c759'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // 滾動到結果區
+        document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
 </body>
 </html>
